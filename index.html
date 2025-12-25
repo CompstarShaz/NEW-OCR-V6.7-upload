@@ -952,44 +952,115 @@ body.light .fixed-btn::after {
 <div class="card">
 <h3>Extracted Fleet Numbers</h3>
 <div id="resultsBox">No results yet.</div>
-<div style="text-align:center;">
-<button id="exportTxtBtn"
-style="
-display:inline-flex;
-align-items:center;
-justify-content:center;
-gap:12px;
-padding:16px 28px;
-font-size:20px;
-font-weight:700;
-background:#45004F40;
-border:2px solid black;
-border-radius:12px;
-color:transparent;
-background-clip:text;
--webkit-background-clip:text;
-text-fill-color:transparent;
--webkit-text-fill-color:transparent;
-background-image:linear-gradient(45deg, purple, #8AB7E3);
-box-shadow:4px 8px 20px rgba(0,255,0,0.5);
-cursor:pointer;
-margin-top:20px;
-transition:transform 0.5s ease;
-flex-wrap:wrap;
-"
-onmouseover="this.style.transform='scale(1.25)'"
-onmouseout="this.style.transform='scale(1)'"
->
-  <div style="display:flex;flex-direction:column;align-items:center;line-height:1.1;">
-    <h2 style="margin:0;font-size:22px;">Export As Text</h2>
-    <h4 style="margin:0;font-size:15px;">Clockwork_[date].txt</h4>
-  </div>
-  <img src="assets/dldown.png" alt="Download" style="width:70px;height:80px;object-fit:contain;">
-</button>
+<!-- COMBINED EXPORT & COPY CONTROLS -->
+<div style="text-align:center; margin-top:20px;">
+  <button id="copyBtn"
+  style="padding:12px 22px;font-size:16px;font-weight:bold;cursor:pointer;
+  border-radius:8px;border:2px solid #222;background:#4b008250;color:#fff;
+  box-shadow:0 0 10px rgba(0,255,0,0.4);">
+    📋 Copy Fleet Numbers
+  </button>
 </div>
-<div style="text-align:center;"><button id="copyBtn">Copy Fleet Numbers</button></div>
-<div style="text-align:center;"><button id="exportImgBtn">Export Preview</button></div>
+
+<!-- DUAL EXPORT BUTTONS: SIDE-BY-SIDE SPLIT -->
+<div style="
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:0;
+  margin-top:25px;
+  text-align:center;
+  flex-wrap:wrap;
+">
+  <!-- LEFT BUTTON: EXPORT AS TXT -->
+  <button id="exportTxtBtn"
+  style="
+  flex:1;
+  min-width:250px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding:18px;
+  height:100px;
+  font-size:20px;
+  font-weight:700;
+  background:#45004F40;
+  border:2px solid black;
+  border-radius:12px 0 0 12px;
+  color:transparent;
+  background-clip:text;
+  -webkit-background-clip:text;
+  text-fill-color:transparent;
+  -webkit-text-fill-color:transparent;
+  background-image:linear-gradient(45deg, purple, #8AB7E3);
+  box-shadow:4px 8px 20px rgba(0,255,0,0.5);
+  cursor:pointer;
+  transition:transform 0.5s ease;
+  ">
+    <img src="assets/copy1.png" alt="Copy"
+         style="width:40px;height:40px;object-fit:contain;
+         filter:invert(1) contrast(1.5) brightness(1.2);">
+    <div style="display:flex;flex-direction:column;align-items:center;line-height:1.1;">
+      <h2 style="margin:0;font-size:22px;">Export As TXT</h2>
+      <h4 style="margin:0;font-size:15px;">Clockwork_[date].txt</h4>
+    </div>
+    <img src="assets/dldown.png" alt="Download"
+         style="width:40px;height:40px;object-fit:contain;
+         filter:invert(1) contrast(1.5) brightness(1.2);">
+  </button>
+
+  <!-- RIGHT BUTTON: EXPORT AS FLEET + DETAILS -->
+  <button id="exportTxtOCRBtn"
+  style="
+  flex:1;
+  min-width:250px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding:18px;
+  height:100px;
+  font-size:20px;
+  font-weight:700;
+  background:#45004F40;
+  border:2px solid black;
+  border-radius:0 12px 12px 0;
+  color:transparent;
+  background-clip:text;
+  -webkit-background-clip:text;
+  text-fill-color:transparent;
+  -webkit-text-fill-color:transparent;
+  background-image:linear-gradient(45deg, purple, #8AB7E3);
+  box-shadow:4px 8px 20px rgba(0,255,0,0.5);
+  cursor:pointer;
+  transition:transform 0.5s ease;
+  ">
+    <img src="assets/copy1.png" alt="Copy"
+         style="width:40px;height:40px;object-fit:contain;
+         filter:invert(1) contrast(1.5) brightness(1.2);">
+    <div style="display:flex;flex-direction:column;align-items:center;line-height:1.1;">
+      <h2 style="margin:0;font-size:22px;">Export As Fleet + Details</h2>
+      <h4 style="margin:0;font-size:15px;">Clockwork_[date].txt</h4>
+    </div>
+    <img src="assets/dldown.png" alt="Download"
+         style="width:40px;height:40px;object-fit:contain;
+         filter:invert(1) contrast(1.5) brightness(1.2);">
+  </button>
 </div>
+
+<!-- EXPORT BUTTONS AS JPG -->
+<div style="text-align:center; margin-top:20px;">
+  <button id="exportBtnsImg"
+  style="display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px 26px;font-size:18px;font-weight:700;cursor:pointer;
+  border-radius:12px;border:2px solid black;background:#45004F40;
+  color:#fff;box-shadow:4px 8px 20px rgba(0,255,0,0.5);
+  transition:transform 0.4s ease;">
+    <img src="assets/Epping.png" alt="Export"
+         style="width:60px;height:40px;object-fit:contain;">
+    Export Buttons as JPG
+  </button>
 </div>
 <div class="bottom-nav">
 <button class="nav-btn" onclick="scrollToSection('ocrPreview')">OCR</button>
@@ -1436,76 +1507,68 @@ function filterGarages(q) {
   </div>
 </div>
 <script>
-document.getElementById('exportTxtBtn').onclick = () => {
-  const rawText = resultsBox.textContent.trim();
-  if (!rawText || rawText.startsWith('No')) {
-    alert('No fleet numbers to export!');
-    return;
+// === COPY BUTTON ===
+document.getElementById('copyBtn').addEventListener('click', async () => {
+  const text = (resultsBox && resultsBox.textContent.trim()) || '';
+  if (!text || text.startsWith('No')) return alert('No fleet numbers to copy!');
+  try {
+    await navigator.clipboard.writeText(text);
+    copyBtn.textContent = '✅ Copied!';
+    setTimeout(() => copyBtn.textContent = '📋 Copy Fleet Numbers', 1500);
+  } catch (err) {
+    console.error('Clipboard copy failed:', err);
+    alert('Clipboard not supported in this browser.');
   }
+});
 
-  // Split, clean, remove duplicates, and sort
-  let fleetList = rawText
-    .split(/[\s,]+/)
-    .map(x => x.trim())
-    .filter(x => x.length > 0);
-
-  fleetList = [...new Set(fleetList)].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-
-  // Format vertically, one per line, each ending with a comma
-  const formattedText = fleetList.map(n => n + ',').join('\n');
-
-  // Format filename as Clockwork_(DD-MM-YYYY).txt
-  const today = new Date();
-  const dateStr = `${String(today.getDate()).padStart(2,'0')}-${String(today.getMonth()+1).padStart(2,'0')}-${today.getFullYear()}`;
-  const fileName = `Clockwork_${dateStr}.txt`;
-
-  // Create and trigger download
-  const blob = new Blob([formattedText], { type: 'text/plain' });
-  const link = document.createElement('a');
-  link.download = fileName;
-  link.href = URL.createObjectURL(blob);
-  link.click();
-};
-</script>
-<script>
+// === EXPORT FLEET NUMBERS ONLY ===
 document.getElementById('exportTxtBtn').onclick = () => {
-  const rawText = resultsBox.textContent.trim();
-  if (!rawText || rawText.startsWith('No')) {
-    alert('No fleet numbers to export!');
-    return;
-  }
+  const raw = resultsBox.textContent.trim();
+  if (!raw || raw.startsWith('No')) return alert('No fleet numbers to export!');
+  let list = raw.split(/[\s,]+/).map(x=>x.trim().toUpperCase()).filter(x=>x);
+  list = [...new Set(list)].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
 
-  let fleetList = rawText
-    .split(/[\s,]+/)
-    .map(x => x.trim().toUpperCase())
-    .filter(x => x.length > 0);
+  const g={}; list.forEach(n=>{const p=/^[A-Z]+/.exec(n)?.[0]||'NUM';(g[p]??=[]).push(n);});
+  let txt=`- Asset Locator App -\n(Clockwork Schedule Fleet Numbers)\n\nFleet.\n`;
+  Object.keys(g).sort().forEach(p=>{txt+=g[p].map(x=>x+',').join('\n')+'\n\n';});
 
-  fleetList = [...new Set(fleetList)].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-
-  const groups = {};
-  fleetList.forEach(item => {
-    const prefix = /^[A-Z]+/.exec(item)?.[0] || 'NUM';
-    if (!groups[prefix]) groups[prefix] = [];
-    groups[prefix].push(item);
-  });
-
-  let formattedText = `- Asset Locator App -\n(Clockwork Schedule Fleet Numbers)\n\nFleet.\n`;
-
-  Object.keys(groups).sort().forEach(prefix => {
-    formattedText += groups[prefix].map(n => n + ',').join('\n');
-    formattedText += '\n\n';
-  });
-
-  const today = new Date();
-  const dateStr = `${String(today.getDate()).padStart(2,'0')}-${String(today.getMonth()+1).padStart(2,'0')}-${today.getFullYear()}`;
-  const fileName = `Clockwork_${dateStr}.txt`;
-
-  const blob = new Blob([formattedText], { type: 'text/plain' });
-  const link = document.createElement('a');
-  link.download = fileName;
-  link.href = URL.createObjectURL(blob);
-  link.click();
+  const d=new Date(),date=`${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
+  const blob=new Blob([txt],{type:'text/plain'});
+  const a=document.createElement('a');a.download=`Clockwork_${date}.txt`;a.href=URL.createObjectURL(blob);a.click();
 };
+
+// === EXPORT FLEET NUMBERS + OCR DETAILS ===
+document.getElementById('exportTxtOCRBtn').onclick = () => {
+  const raw = resultsBox.textContent.trim();
+  if (!raw || raw.startsWith('No')) return alert('No fleet numbers to export!');
+  let list = raw.split(/[\s,]+/).map(x=>x.trim().toUpperCase()).filter(x=>x);
+  list = [...new Set(list)].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+
+  const g={}; list.forEach(n=>{const p=/^[A-Z]+/.exec(n)?.[0]||'NUM';(g[p]??=[]).push(n);});
+  let txt=`- Asset Locator App -\n(Clockwork Schedule Fleet Numbers + OCR Details)\n\nFleet.\n`;
+  Object.keys(g).sort().forEach(p=>{txt+=g[p].map(x=>x+',').join('\n')+'\n\n';});
+  txt+=`------------------------------------------\nOCR Extracted Details:\n\n`;
+  txt+=(lastOCRText && lastOCRText.trim().length?lastOCRText.trim():'(No OCR results found)')+'\n';
+
+  const d=new Date(),date=`${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
+  const blob=new Blob([txt],{type:'text/plain'});
+  const a=document.createElement('a');a.download=`Clockwork_${date}.txt`;a.href=URL.createObjectURL(blob);a.click();
+};
+
+// === EXPORT BUTTONS AS JPG ===
+document.getElementById('exportBtnsImg').addEventListener('click', () => {
+  const c=document.getElementById('buttonsContainer');
+  if(!c||c.children.length===0)return alert('No buttons to export!');
+  html2canvas(c,{backgroundColor:'#000',useCORS:true,scale:2})
+  .then(cv=>{
+    const d=new Date(),name=`FleetButtons-${d.toISOString().slice(0,19).replace(/[:T]/g,'_')}.jpg`;
+    cv.toBlob(b=>{
+      if(!b)return alert('Failed to generate image.');
+      const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);
+    },'image/jpeg',0.95);
+  })
+  .catch(e=>{console.error('Export failed:',e);alert('Unable to export button image.');});
+});
 </script>
 <script>
   const snowCount = 180;
