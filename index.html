@@ -7,10 +7,8 @@
 <script src="./assets/tesseract.min.js"></script>
 <script src="./assets/html2canvas.min.js"></script>
 
-<style>
-/* --- FIX MOBILE DRAGGING --- */
-
-html,
+	<style>
+/html,
 body {
 	height: auto;
 	overflow-x: hidden;
@@ -161,7 +159,7 @@ body.light #themeBtn {
   position: relative;
   background-image: url('assets/bg1.gif');
   background-size: 100% auto;
-  opacity: 0.4;
+  opacity: 0.3;
   top: -100px;
   left: 0;
   z-index: -3;
@@ -810,50 +808,252 @@ body.light .fixed-btn::after {
 }
 
 </style>
-</head>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>
+  /* --- FIX MOBILE DRAGGING --- */
+  html, body {
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: 0.25s;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  /* prevent parallax layers from generating scroll area */
+  .parallax-layer, .viz canvas, .snowflake {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* lock internal containers inside screen */
+  .container {
+    max-height: 100vh;
+    overflow-y: auto;
+    overscroll-behavior: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px;
+    max-width: 580px;
+    margin: 0 auto 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-sizing: border-box;
+  }
+
+  /* === Neon Glow Accent Card Theme === */
+  body.dark .card {
+    background: rgba(10, 20, 40, 0.4);
+    border: 1px solid rgba(0, 255, 213, 0.3);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.35), inset 0 0 8px rgba(0, 255, 213, 0.15);
+    color: #ccfaff;
+    transition: all 0.4s ease;
+  }
+  body.light .card {
+    background: #fefefe;
+    border: 1px solid rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 14px rgba(0, 180, 255, 0.45);
+    color: #111;
+    transition: all 0.4s ease;
+  }
+  body.dark .card:hover {
+    box-shadow: 0 0 35px rgba(0,255,255,0.45), inset 0 0 10px rgba(0,255,213,0.2);
+    transform: translateY(-3px);
+  }
+  body.light .card:hover {
+    box-shadow: 0 0 18px rgba(0,180,255,0.25);
+    transform: translateY(-3px);
+  }
+
+  /* Theme Button Neon Animation */
+  #themeBtn {
+    background: linear-gradient(145deg, #00ffff, #0072ff);
+    color: #fff;
+    border: none;
+    box-shadow: 0 0 20px rgba(0,255,255,0.5);
+    transition: all 0.3s ease;
+    animation: neonPulse 2.5s infinite alternate;
+  }
+  @keyframes neonPulse {
+    0% { box-shadow: 0 0 10px rgba(0,255,255,0.5), 0 0 20px rgba(0,255,255,0.6); transform: scale(1); }
+    100% { box-shadow: 0 0 25px rgba(0,255,255,0.8), 0 0 50px rgba(0,255,255,0.6); transform: scale(1.05); }
+  }
+  #themeBtn:hover { transform: scale(1.1); filter: brightness(1.2); }
+  body.light #themeBtn {
+    background: linear-gradient(145deg, #555, #999);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.6);
+    animation: none;
+  }
+
+  .parallax-layer {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-position: cover;
+    background-size: cover;
+    pointer-events: none;
+    z-index: -3;
+  }
+  .parallax-top { position: relative; background-image: url('assets/bg1.gif'); background-size: 100% auto; opacity: 0.4; top: -100px; left: 0; z-index: -3; overflow: hidden; }
+  .parallax-mid { background-image: url('assets/bgb.png'); background-size: 50% auto; top: 0; left: 0; z-index: -2; }
+  .parallax-bottom { background-image: url('assets/bgc.png'); background-size: 50% auto; top: 0; z-index: -1; }
+
+  #previewContainer { width: 100%; display: flex; justify-content: center; align-items: center; }
+  #topLogo { display: block; margin: 12px auto; width: 80%; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3); border: 3px solid rgba(0,255,255,0.6); animation: fadePulse 3s ease-in-out infinite; }
+  @keyframes fadePulse { 20% { opacity: 1; filter: drop-shadow(0 0 8px rgba(0,255,255,0.7)); } 50% { opacity: 0.1; filter: drop-shadow(0 0 2px rgba(0,255,255,0.2)); } 100% { opacity: 1; filter: drop-shadow(0 0 8px rgba(0,255,255,0.7)); } }
+
+  #viewerIframe { width: 100%; aspect-ratio: 4 / 2; border: 4px solid #48CA68; border-radius: 20px; background: #000; min-height: 130px; transition: all 0.6s ease; }
+  body.light #viewerIframe { border-color: #111; }
+
+  h1, h3 { text-align: center; text-shadow: 0 2px 6px rgba(0,200,255,0.3); }
+  h3 { margin-top: 14px; }
+
+  .card { background: rgba(15,25,40,0.55); border-radius: 16px; padding: 14px; box-shadow: 0 6px 20px rgba(0,200,255,0.3); transition: 0.3s; }
+  body.light .card { background: #868798; box-shadow: 0 6px 20px #B9CBCC60; }
+  .card:hover { box-shadow: 0 8px 28px rgba(0,255,255,0.45); }
+
+  input, textarea { width: 100%; padding: 12px; border-radius: 12px; background: #0f1928; border: 1px solid #334; color: #e6eef8; font-family: monospace; outline: none; }
+  body.light input, body.light textarea { background: #454545; border: 1px solid #ccc; color: #111; }
+  textarea { min-height: 80px; max-height: 200px; resize: none; }
+
+  button { padding: 12px 18px; border-radius: 14px; border: none; font-weight: 600; cursor: pointer; transition: 0.25s; box-shadow: 0 4px 12px rgba(0,255,255,0.3); background: linear-gradient(145deg, #303a44, #111418); color: #2C2D2F; }
+  body.light button { background: #eee; color: #111; box-shadow: 0 4px 12px rgba(0,255,0,0.6); }
+  button:hover { transform: translateY(-3px) scale(1.05); }
+  button:active { transform: translateY(0) scale(0.98); }
+
+  .asset-btn { background: linear-gradient(145deg, #0a1e2c, #0c2c3e); color: #00ffff; border: 1px solid rgba(0,255,255,0.3); font-size: 1em; margin: 4px; padding: 10px 16px; border-radius: 12px; }
+  body.light .asset-btn { background: #ddd; color: #111; border: 1px solid #999; }
+
+  .tiny-btn { padding: 6px 10px; font-size: 0.9em; border-radius: 12px; }
+  #copyBtn { background: linear-gradient(135deg, #00b4ff, #0072ff); color: #fff; font-weight: 700; border: none; border-radius: 14px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,200,255,0.4); transition: all 0.3s ease; }
+  #copyBtn:hover { transform: scale(1.05); box-shadow: 0 6px 18px rgba(0,255,255,0.5); }
+  body.light #copyBtn { background: linear-gradient(135deg, #555, #999); color: #fff; }
+
+  #operatorTitle { font-size: 2.6em; text-align: center; font-weight: 900; margin: 10px 0; color: #CC0776; background: linear-gradient(90deg, #ff00aa, #9d00ff); -webkit-background-clip: text; }
+
+  #ocrLoader { display: none; margin: 12px auto; width: 50px; height: 50px; border: 6px solid rgba(255,255,255,0.15); border-top: 6px solid #00b4ff; border-radius: 50%; animation: spin 1.1s linear infinite; }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  .flex-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .flex-col { display: flex; flex-direction: column; gap: 8px; }
+
+  #mediaBtn { position: fixed; top: 12px; left: 9px; padding: 5px 16px; border-radius: 16px; font-weight: 700; box-shadow: 0 4px 8px #A94FCC50; cursor: pointer; transition: 0.3s; background: linear-gradient(145deg, #00ffdc, #00b4ff); color: #000; z-index: 101; width: 90px; height: 90px; border: none; }
+  #themeBtn { right: 10px; background: linear-gradient(145deg, #ff00aa, #9d00ff); color: #fff; position: fixed; top: 12px; width: 90px; height: 90px; border: none; z-index: 101; }
+
+  .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15,25,40,0.95); display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -4px 20px rgba(0,255,255,0.3); z-index: 100; }
+  body.light .bottom-nav { background: #eee; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
+  .nav-btn { flex: 1; text-align: center; color: #fff; font-size: 0.7em; border: none; background: none; cursor: pointer; transition: 0.5s; }
+  body.light .nav-btn { color: #111; }
+  .nav-btn:hover { color: #00d0ff; transform: scale(1.1); }
+
+  #mediaModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 102; }
+
+  #menuModal { background: rgba(15,25,40,0.95); padding: 12px; border-radius: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); justify-items: center; align-items: start; gap: 16px; width: 95%; max-height: 90%; margin: 0 auto; overflow-y: auto; box-sizing: border-box; }
+  #menuModal button { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; background: #0f1928; color: #00e0ff; border: none; border-radius: 12px; padding: 8px; width: 100%; max-width: 180px; cursor: pointer; }
+  #menuModal button img { width: 100%; height: auto; border-radius: 8px; }
+
+  .pdf-submenu { grid-column: 1/-1; background: #2563eb; color: #fff; text-align: center; padding: 10px; border-radius: 8px; }
+
+  #selectedModal { position: fixed; top: 5%; left: 5%; width: 90%; height: 90%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 103; border-radius: 8px; overflow: hidden; }
+  #selectedModal img { width: 100%; height: 100%; object-fit: contain; cursor: grab; user-select: none; pointer-events: all; }
+
+  #closeModal { position: absolute; top: 12px; right: 16px; background: url('assets/silver-stby.png') no-repeat center center/contain; color: #000; border: none; border-radius: 50%; width: 66px; height: 66px; font-size: 30px; cursor: pointer; z-index: 104; box-shadow: 0 0 12px rgba(0,0,0,0.6); }
+  #closeModal:hover { background-color: #eee; }
+
+  #modalPrev, #modalNext, #modalShare { border: none; border-radius: 50%; cursor: pointer; box-shadow: 0 0 12px rgba(0,0,0,0.6); width: 40px; height: 40px; position: absolute; top: 50%; transform: translateY(-50%); z-index: 105; }
+  #modalPrev { left: 10px; background: url('assets/leftvarrow.png') no-repeat center center/contain; }
+  #modalNext { right: 10px; background: url('assets/rightarrow.png') no-repeat center center/contain; }
+  #modalShare { bottom: 10px; right: 10px; width: 80px; height: 80px; background: url('assets/dl.png') no-repeat center center/contain; }
+
+  .viz canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.6; z-index: -2; pointer-events: none; }
+
+  /* Garage reference styles (fixed position corrected) */
+  #garageRefBtn {
+    background-image: url('assets/depot.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    padding: 10px;
+    width: 90px;
+    height: 90px;
+    position: fixed;
+    top: 12px;
+    left: 110px;
+    z-index: 100;
+    cursor: pointer;
+    border-radius: 26px;
+    box-shadow: 4px 8px 20px #7A30CC;
+  }
+
+  #garageRefModal { position: fixed; inset: 0; display: none; background: rgba(0,0,0,0.3); z-index: 110; }
+  #garageRefBox { position: absolute; inset: 5%; background: #0d1117; border-radius: 16px; box-shadow: 0 0 40px rgba(0,255,213,0.4); overflow-y: auto; overflow-x: hidden; max-height: 84vh; }
+  #garageRefBox iframe { width: 100%; height: 100%; border: none; }
+  #garageRefClose { position: absolute; top: 10px; right: 34px; z-index: 2; border: none; background: rgba(0,48,40,0.375); font-size: 22px; font-weight: 700; padding: 6px 15px; border-radius: 8px; cursor: pointer; color: #fff; }
+
+  /* Button titles */
+  .fixed-btn { position: relative; display: inline-block; text-align: center; }
+  .fixed-btn::after { content: attr(data-title); position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 1.2em; color: #CAD8F1; text-shadow: 3px 3px 3px #212121; white-space: nowrap; font-weight: 600; }
+  body.light .fixed-btn::after { color: #111; text-shadow: none; }
+
+  .btn-3d { background-image: url('assets/bgrem.gif'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: 10px; width: 90px; height: 90px; position: fixed; top: 130px; left: 10px; z-index: 101; cursor: pointer; border-radius: 26px; box-shadow: 4px 8px 20px #7A30CC; }
+  .btn-3d:active { transform: translateY(6px); box-shadow: 0 6px 0 #123a80, 0 6px 12px rgba(0,0,0,0.6); }
+
+  /* Overlay */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: center; justify-content: center; z-index: 1000; }
+  .overlay.active { display: flex; }
+  .iframe-container { position: relative; width: 90vw; height: 90vh; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+  .iframe-container iframe { width: 100%; height: 100%; border: none; }
+  .close-btn { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; background: #ff4d4d; color: #fff; font-size: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.6); z-index: 2; }
+  </style></head>
 <body class="dark">
 <div class="viz"></div>
 <div class="viz canvas">❄️❄️❄️</div>
-<body>  
+<body>
 <div class="btn-3d" id="openBtn">.......BG REMOVER</div>
-  <div class="overlay" id="overlay">
-    <div class="iframe-container">
-      <div class="close-btn" id="closeBtn">×</div>
-      <iframe src="assets/BG-REM.html"></iframe>
-    </div>
-  </div>  
-
-
-<!-- PARALLAX LAYERS -->
+<div class="overlay" id="overlay">
+<div class="iframe-container">
+<div class="close-btn" id="closeBtn">×</div>
+<iframe src="assets/bgrem.html"></iframe>
+</div>
+</div>
 <div class="parallax-layer parallax-top"></div>
 <div class="parallax-layer parallax-mid"></div>
 <div class="parallax-layer parallax-bottom"></div>
-<!-- FLOATING BUTTONS -->
-<button id="mediaBtn" class="fixed-btn" data-title="Media" style="background:none;border:none;padding:0;width:90px;height:90px;position:fixed;top:12px;left:12px;z-index:101;cursor:pointer;">
-  <img src="assets/info.webp" alt="Media Menu" style="width:100%;height:100%;border-radius:16px;box-shadow:0 4px 8px #A94FCC50;">
+<button class="fixed-btn" data-title="Media" id="mediaBtn" style="background:none;border:none;padding:0;width:90px;height:90px;position:fixed;top:12px;left:12px;z-index:101;cursor:pointer;">
+<img alt="Media Menu" src="assets/info.webp" style="width:100%;height:100%;border-radius:16px;box-shadow:0 4px 8px #A94FCC50;"/>
 </button>
-
-<button id="themeBtn" class="fixed-btn" data-title="Theme" style="background:none;border:none;padding:0;width:90px;height:90px;position:fixed;top:12px;right:10px;z-index:101;cursor:pointer;">
-  <img src="assets/theme.webp" alt="Theme" style="width:100%;height:100%;border-radius:16px;box-shadow:0 4px 12px #5D714750;">
+<button class="fixed-btn" data-title="Theme" id="themeBtn" style="background:none;border:none;padding:0;width:90px;height:90px;position:fixed;top:12px;right:10px;z-index:101;cursor:pointer;">
+<img alt="Theme" src="assets/theme.webp" style="width:100%;height:100%;border-radius:16px;box-shadow:0 4px 12px #5D714750;"/>
 </button>
-
 <div class="container">
-<DL>
-</DL>
-<DL>
-</DL>
-<h3><p>C.W Companion</h3></p><p><h1><span style="color: #FEFEFE"></p>Asset Locator OCR</h1></span>
-<img id="topLogo" src="https://iili.io/fELzvIV.png">
+<dl>
+</dl>
+<dl>
+</dl>
+<h3><p>C.W Companion</p></h3><p><h1><span style="color: #FEFEFE"></span></h1></p>Asset Locator OCR
+<img id="topLogo" src="assets/toplogo.gif"/>
 <div class="card flex-row" style="justify-content:center;">
-  <label for="fileInput" class="tiny-btn" style="
+<label class="tiny-btn" for="fileInput" style="
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
     display: inline-block;">
-    <img src="assets/cw.webp" alt="Open Image" style="width:180px;height:auto;border-radius:12px;box-shadow:0 4px 12px rgba(0,255,255,.3);">
-  </label>
-  <input type="file" id="fileInput" accept="image/*" style="display:none;">
+<img alt="Open Image" src="assets/cw.webp" style="width:180px;height:auto;border-radius:12px;box-shadow:0 4px 12px rgba(0,255,255,.3);"/>
+</label>
+<input accept="image/*" id="fileInput" style="display:none;" type="file"/>
 <button id="clearBtn" style="
   background: none;
   border: none;
@@ -864,65 +1064,53 @@ body.light .fixed-btn::after {
   top: 5px;
   right: 15px;
   cursor: pointer;">
-  <img src="assets/clear.gif" alt="Theme" style="width:100%;height:100%;border-radius:16px;box-shadow:0 4px 12px rgba(0,255,255,.3);">
+<img alt="Theme" src="assets/clear.gif" style="width:100%;height:100%;border-radius:16px;box-shadow:0 4px 12px rgba(0,255,255,.3);"/>
 </button>
 </div>
 <div class="card">
 <h3>OCR Preview</h3>
-<div id="ocrPreview"[+Buttons] = When OCR results appear here, Press the "+Button" to Generate Buttons. Remember 'No Asset numbers in OCR data = No Buttons'...</div>
+<div "+button"="" 'no="" [+buttons]="When" appear="" asset="" buttons'...<="" buttons.="" data="No" div="" generate="" here,="" id="ocrPreview" in="" numbers="" ocr="" press="" remember="" results="" the="" to="">
 <div id="ocrLoader"></div>
 </div>
 <div class="card flex-col" style="align-items:center;">
-  <textarea id="inputText" placeholder="OCR Results + Or Add more Fleet numbers manually...." style="width:90%;"></textarea>
-
-
-    <!-- Left: Generate -->
-    <button id="generateBtn" style="
+<textarea id="inputText" placeholder="OCR Results + Or Add more Fleet numbers manually...." style="width:90%;"></textarea>
+<button id="generateBtn" style="
       background:none;
       border:none;
       padding:0;
       width:80px;
       height:80px;
       cursor:pointer;">
-      <img src="assets/gen.webp" alt="Generate"
-           style="width:100%;height:100%;border-radius:16px;
-           box-shadow:0 4px 12px rgba(0,255,255,.3);">
-    </button>
-
-    <!-- Center: Insert OCR -->
-    <button id="insertOCRBtn" style="
+<img alt="Generate" src="assets/gen.webp" style="width:100%;height:100%;border-radius:16px;
+           box-shadow:0 4px 12px rgba(0,255,255,.3);"/>
+</button>
+<button id="insertOCRBtn" style="
       background:none;
       border:none;
       padding:0;
       width:120px;
       height:120px;
       cursor:pointer;">
-      <img src="assets/add.webp" alt="InsertOCR"
-           style="width:100%;height:100%;border-radius:16px;
-           box-shadow:0 4px 12px rgba(0,255,255,.3);">
-    </button>
-
-    <!-- Right: TTS + Pause stacked -->
-    <div style="
+<img alt="InsertOCR" src="assets/add.webp" style="width:100%;height:100%;border-radius:16px;
+           box-shadow:0 4px 12px rgba(0,255,255,.3);"/>
+</button>
+<div style="
       display:flex;
       flex-direction:column;
       align-items:center;
       justify-content:center;
       gap:6px;">
-      
-      <button id="ttsBtn" style="
+<button id="ttsBtn" style="
         background:none;
         border:none;
         padding:0;
         width:70px;
         height:70px;
         cursor:pointer;">
-        <img src="assets/tts.png" alt="🔈Read"
-             style="width:100%;height:100%;border-radius:16px;
-             box-shadow:0 4px 12px rgba(0,255,255,.3);">
-      </button>
-
-      <button id="pauseBtn" style="
+<img alt="🔈Read" src="assets/tts.png" style="width:100%;height:100%;border-radius:16px;
+             box-shadow:0 4px 12px rgba(0,255,255,.3);"/>
+</button>
+<button id="pauseBtn" style="
         background:none;
         border:none;
         padding:0;
@@ -931,19 +1119,18 @@ body.light .fixed-btn::after {
         font-size:1.8em;
         color:#00ffff;
         cursor:pointer;">⏸️</button>
-    </div>
-
-  </div>
+</div>
+</div>
 </div>
 <h2>Preview</h2>
 <div id="operatorTitle">Abellio</div>
 <div id="previewContainer"><iframe id="viewerIframe"></iframe></div>
 <div class="operator-track">
-<button class="operatorBtn active" data-name="Abellio" data-template="https://lvf.io/#LDN|TL" data-color="#ef4444">Abellio</button>
-<button class="operatorBtn" data-name="Go-Ahead" data-template="https://lvf.io/#LDN|GAL" data-color="#2563eb">Go-Ahead</button>
-<button class="operatorBtn" data-name="Stagecoach" data-template="https://lvf.io/#LDN|SLN" data-color="#f97316">Stagecoach</button>
-<button class="operatorBtn" data-name="Metroline" data-template="https://lvf.io/#LDN|ML" data-color="#991b1b">Metroline</button>
-<button class="operatorBtn" data-name="Arriva" data-template="https://lvf.io/#LDN|AL" data-color="#06b6d4">Arriva</button>
+<button class="operatorBtn active" data-color="#ef4444" data-name="Abellio" data-template="https://lvf.io/#LDN|TL">Abellio</button>
+<button class="operatorBtn" data-color="#2563eb" data-name="Go-Ahead" data-template="https://lvf.io/#LDN|GAL">Go-Ahead</button>
+<button class="operatorBtn" data-color="#f97316" data-name="Stagecoach" data-template="https://lvf.io/#LDN|SLN">Stagecoach</button>
+<button class="operatorBtn" data-color="#991b1b" data-name="Metroline" data-template="https://lvf.io/#LDN|ML">Metroline</button>
+<button class="operatorBtn" data-color="#06b6d4" data-name="Arriva" data-template="https://lvf.io/#LDN|AL">Arriva</button>
 </div>
 <div class="card">
 <h3>Generated Buttons</h3>
@@ -952,115 +1139,40 @@ body.light .fixed-btn::after {
 <div class="card">
 <h3>Extracted Fleet Numbers</h3>
 <div id="resultsBox">No results yet.</div>
-<!-- COMBINED EXPORT & COPY CONTROLS -->
-<div style="text-align:center; margin-top:20px;">
-  <button id="copyBtn"
-  style="padding:12px 22px;font-size:16px;font-weight:bold;cursor:pointer;
-  border-radius:8px;border:2px solid #222;background:#4b008250;color:#fff;
-  box-shadow:0 0 10px rgba(0,255,0,0.4);">
-    📋 Copy Fleet Numbers
-  </button>
-</div>
-
-<!-- DUAL EXPORT BUTTONS: SIDE-BY-SIDE SPLIT -->
-<div style="
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:0;
-  margin-top:25px;
-  text-align:center;
-  flex-wrap:wrap;
+<div style="text-align:center;">
+<button id="exportTxtBtn" onmouseout="this.style.transform='scale(1)'" onmouseover="this.style.transform='scale(1.25)'" style="
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:12px;
+padding:16px 28px;
+font-size:20px;
+font-weight:700;
+background:#45004F40;
+border:2px solid black;
+border-radius:12px;
+color:transparent;
+background-clip:text;
+-webkit-background-clip:text;
+text-fill-color:transparent;
+-webkit-text-fill-color:transparent;
+background-image:linear-gradient(45deg, purple, #8AB7E3);
+box-shadow:4px 8px 20px rgba(0,255,0,0.5);
+cursor:pointer;
+margin-top:20px;
+transition:transform 0.5s ease;
+flex-wrap:wrap;
 ">
-  <!-- LEFT BUTTON: EXPORT AS TXT -->
-  <button id="exportTxtBtn"
-  style="
-  flex:1;
-  min-width:250px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  padding:18px;
-  height:100px;
-  font-size:20px;
-  font-weight:700;
-  background:#45004F40;
-  border:2px solid black;
-  border-radius:12px 0 0 12px;
-  color:transparent;
-  background-clip:text;
-  -webkit-background-clip:text;
-  text-fill-color:transparent;
-  -webkit-text-fill-color:transparent;
-  background-image:linear-gradient(45deg, purple, #8AB7E3);
-  box-shadow:4px 8px 20px rgba(0,255,0,0.5);
-  cursor:pointer;
-  transition:transform 0.5s ease;
-  ">
-    <img src="assets/copy1.png" alt="Copy"
-         style="width:40px;height:40px;object-fit:contain;
-         filter:invert(1) contrast(1.5) brightness(1.2);">
-    <div style="display:flex;flex-direction:column;align-items:center;line-height:1.1;">
-      <h2 style="margin:0;font-size:22px;">Export As TXT</h2>
-      <h4 style="margin:0;font-size:15px;">Clockwork_[date].txt</h4>
-    </div>
-    <img src="assets/dldown.png" alt="Download"
-         style="width:40px;height:40px;object-fit:contain;
-         filter:invert(1) contrast(1.5) brightness(1.2);">
-  </button>
-
-  <!-- RIGHT BUTTON: EXPORT AS FLEET + DETAILS -->
-  <button id="exportTxtOCRBtn"
-  style="
-  flex:1;
-  min-width:250px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  padding:18px;
-  height:100px;
-  font-size:20px;
-  font-weight:700;
-  background:#45004F40;
-  border:2px solid black;
-  border-radius:0 12px 12px 0;
-  color:transparent;
-  background-clip:text;
-  -webkit-background-clip:text;
-  text-fill-color:transparent;
-  -webkit-text-fill-color:transparent;
-  background-image:linear-gradient(45deg, purple, #8AB7E3);
-  box-shadow:4px 8px 20px rgba(0,255,0,0.5);
-  cursor:pointer;
-  transition:transform 0.5s ease;
-  ">
-    <img src="assets/copy1.png" alt="Copy"
-         style="width:40px;height:40px;object-fit:contain;
-         filter:invert(1) contrast(1.5) brightness(1.2);">
-    <div style="display:flex;flex-direction:column;align-items:center;line-height:1.1;">
-      <h2 style="margin:0;font-size:22px;">Export As Fleet + Details</h2>
-      <h4 style="margin:0;font-size:15px;">Clockwork_[date].txt</h4>
-    </div>
-    <img src="assets/dldown.png" alt="Download"
-         style="width:40px;height:40px;object-fit:contain;
-         filter:invert(1) contrast(1.5) brightness(1.2);">
-  </button>
+<div style="display:flex;flex-direction:column;align-items:center;line-height:1.1;">
+<h2 style="margin:0;font-size:22px;">Export As Text</h2>
+<h4 style="margin:0;font-size:15px;">Clockwork_[date].txt</h4>
 </div>
-
-<!-- EXPORT BUTTONS AS JPG -->
-<div style="text-align:center; margin-top:20px;">
-  <button id="exportBtnsImg"
-  style="display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  padding:14px 26px;font-size:18px;font-weight:700;cursor:pointer;
-  border-radius:12px;border:2px solid black;background:#45004F40;
-  color:#fff;box-shadow:4px 8px 20px rgba(0,255,0,0.5);
-  transition:transform 0.4s ease;">
-    <img src="assets/Epping.png" alt="Export"
-         style="width:60px;height:40px;object-fit:contain;">
-    Export Buttons as JPG
-  </button>
+<img alt="Download" src="assets/dldown.png" style="width:70px;height:80px;object-fit:contain;"/>
+</button>
+</div>
+<div style="text-align:center;"><button id="copyBtn">Copy Fleet Numbers</button></div>
+<div style="text-align:center;"><button id="exportImgBtn">Export Preview</button></div>
+</div>
 </div>
 <div class="bottom-nav">
 <button class="nav-btn" onclick="scrollToSection('ocrPreview')">OCR</button>
@@ -1072,37 +1184,34 @@ body.light .fixed-btn::after {
 <div id="menuModal"></div>
 <div id="selectedModal">
 <button id="closeModal"></button>
-<img id="modelImage" src="jfs.png" alt="Model Image">
+<img alt="Model Image" id="modelImage" src="jfs.png"/>
 <button id="modalPrev"></button>
 <button id="modalNext"></button>
 <button id="modalShare"></button>
 </div>
 </div>
-<button id="" class=""></button>
-
-<button id="loginnRefBtn" class="fixed-btn" data-title="Login" style="background:none;border:none;padding:0;width:90px;height:90px;position:fixed;top:15px;right:28%;z-index:101;cursor:pointer;">
-  <img src="assets/login.webp" alt="Login Reference" style="width:100%;height:100%;border-radius:16px;box-shadow:0 4px 12px rgba(0,255,255,.3);">
+<button class="" id=""></button>
+<button class="fixed-btn" data-title="Login" id="loginnRefBtn" style="background:none;border:none;padding:0;width:90px;height:90px;position:fixed;top:15px;right:28%;z-index:101;cursor:pointer;">
+<img alt="Login Reference" src="assets/login.webp" style="width:100%;height:100%;border-radius:16px;box-shadow:0 4px 12px rgba(0,255,255,.3);"/>
 </button>
-
-<div id="loginnRefModal" class="ref-modal">
-  <div class="ref-modal-content">
-    <span class="close">&times;</span>
-    <div id="buttonBar" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:10px;">
-      <button id="editSaveBtn" class="action-btn green-btn">Edit</button>
-      <button id="insertImgBtn" class="action-btn">Insert Image</button>
-      <button id="clearAllBtn" class="action-btn red-btn">Clear All</button>
-      <button id="exitBtn" class="action-btn">Exit</button>
-      <button id="undoBtn" class="action-btn yellow-btn">Undo</button>
-      <button id="redoBtn" class="action-btn yellow-btn">Redo</button>
-      <button id="exportBtn" class="action-btn blue-btn">Export PDF</button>
-      <input type="file" id="imgInput" accept="image/*" style="display:none;">
-    </div>
-    <div id="notebookContainer">
-      <div id="notebook" contenteditable="false"></div>
-    </div>
-  </div>
+<div class="ref-modal" id="loginnRefModal">
+<div class="ref-modal-content">
+<span class="close">×</span>
+<div id="buttonBar" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:10px;">
+<button class="action-btn green-btn" id="editSaveBtn">Edit</button>
+<button class="action-btn" id="insertImgBtn">Insert Image</button>
+<button class="action-btn red-btn" id="clearAllBtn">Clear All</button>
+<button class="action-btn" id="exitBtn">Exit</button>
+<button class="action-btn yellow-btn" id="undoBtn">Undo</button>
+<button class="action-btn yellow-btn" id="redoBtn">Redo</button>
+<button class="action-btn blue-btn" id="exportBtn">Export PDF</button>
+<input accept="image/*" id="imgInput" style="display:none;" type="file"/>
 </div>
-
+<div id="notebookContainer">
+<div contenteditable="false" id="notebook"></div>
+</div>
+</div>
+</div>
 <style>
 .ref-btn {
   position:absolute; 
@@ -1200,22 +1309,15 @@ body.light #themeBtn {
   animation: none;
 }
 </style>
-
-
-<!-- ===== GARAGE REFERENCE BUTTON ===== -->
-<button id="garageRefBtn" class="fixed-btn" data-title="Garage" style="background:none;border:none;padding:0;width:90px;height:90px;position:fixed;top:12px;left:28%;z-index:101;cursor:pointer;">
-  <img src="assets/depot.gif" alt="Garage Reference" style="width:100%;height:100%;border-radius:16px;box-shadow:0 4px 12px rgba(0,255,255,.3);">
+<button class="fixed-btn" data-title="Garage" id="garageRefBtn" style="background:none;border:none;padding:0;width:90px;height:90px;position:fixed;top:12px;left:28%;z-index:101;cursor:pointer;">
+<img alt="Garage Reference" src="assets/depot.gif" style="width:100%;height:100%;border-radius:16px;box-shadow:0 4px 12px rgba(0,255,255,.3);"/>
 </button>
-
-<!-- ===== GARAGE REFERENCE MODAL ===== -->
 <div id="garageRefModal">
-  <div id="garageRefBox">
-    <button id="garageRefClose">✕</button>
+<div id="garageRefBox">
+<button id="garageRefClose">✕</button>
+<iframe #garagetable="" srcdoc='
 
-    <iframe
-      srcdoc='<!-- Garage Fleet Table Snippet with Fleet Vehicles -->
-
-<style>
+&lt;style&gt;
   #garageSearch { width:25%; padding:8px; font-size:16px; margin-bottom:12px; }
   table#garageTable { width:100%; border-collapse:collapse; font-family:Arial,sans-serif; }
   table#garageTable th, table#garageTable td { border:1px solid #ccc; padding:8px; font-size:14px; vertical-align:top; }
@@ -1234,278 +1336,278 @@ body.light #themeBtn {
   .op-first { color:#800080; font-weight:bold; font-size:1.1em; }
   .op-arriva { color:#009933; font-weight:bold; font-size:1.1em; }
   .none { font-style:italic; color:grey; }
-</style>
+&lt;/style&gt;
 
-<input type="text" id="garageSearch" placeholder="Search by garage, fleet number or reg…" onkeyup="filterGarages(this.value)">
+&lt;input type="text" id="garageSearch" placeholder="Search by garage, fleet number or reg…" onkeyup="filterGarages(this.value)"&gt;
 
-<table id="garageTable">
-  <thead>
-    <tr><th>Operator</th><th>Garage</th><th>Address</th><th>Fleet Vehicles</th></tr>
-  </thead>
-  <tbody>
+&lt;table id="garageTable"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;Operator&lt;/th&gt;&lt;th&gt;Garage&lt;/th&gt;&lt;th&gt;Address&lt;/th&gt;&lt;th&gt;Fleet Vehicles&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
 
-    <!-- Extra Vital Addresses -->
-    <tr>
-      <td class="op-stagecoach">Stagecoach</td>
-      <td>Barking Bus Garage</td>
-      <td><a href="https://maps.app.goo.gl/AosKzkoviWopGRxV7" target="_blank">Longbridge Rd, London IG11 8UE</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
-    <tr>
-      <td class="op-stagecoach">Stagecoach</td>
-      <td>Walthamstow Ave Bus Garage (Nr A406)</td>
-      <td><a href="https://maps.app.goo.gl/1oFKtUUEXQHZgshJ7" target="_blank">Walthamstow Avenue, London</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
-    <tr>
-      <td class="op-stagecoach">Stagecoach</td>
-      <td>Leyton Bus Garage</td>
-      <td><a href="https://maps.app.goo.gl/TRJzk8kfRa8qDSNL9" target="_blank">Leyton, London</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
-    <tr>
-      <td class="op-arriva">Arriva</td>
-      <td>Hackney Central Bus Garage</td>
-      <td><a href="https://maps.app.goo.gl/oyXMxhiecj9GPx387" target="_blank">Hackney Central, London</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
-    <tr>
-      <td class="op-arriva">Arriva</td>
-      <td>Norwood Bus Garage</td>
-      <td><a href="https://maps.app.goo.gl/BFoTiHCoQAW6J1Bz6" target="_blank">Norwood, London</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
-    <tr>
-      <td class="op-arriva">Arriva</td>
-      <td>Tottenham Bus Garage</td>
-      <td><a href="https://maps.app.goo.gl/fNu1QowXvQdBwLRy8" target="_blank">Tottenham, London</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
-    <tr>
-      <td class="op-goahead">Go-Ahead</td>
-      <td>Barking River Road</td>
-      <td><a href="https://maps.app.goo.gl/RtEq8yB6PA71gTaw9" target="_blank">51 River Rd., London IG11 0DA</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
-    <tr>
-      <td class="op-goahead">Go-Ahead</td>
-      <td>Camberwell Bus Garage</td>
-      <td><a href="https://maps.app.goo.gl/cV8VbsjmmbAhy4WY8" target="_blank">20 Warner Rd, London SE5 9LU</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
-    <tr>
-      <td class="op-stagecoach">Stagecoach</td>
-      <td>Merton Bus Garage</td>
-      <td><a href="https://maps.app.goo.gl/h5r1CnMzsGjvfRYf9" target="_blank">21 Leyton Rd, London SW19 1DJ</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-stagecoach"&gt;Stagecoach&lt;/td&gt;
+      &lt;td&gt;Barking Bus Garage&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.app.goo.gl/AosKzkoviWopGRxV7" target="_blank"&gt;Longbridge Rd, London IG11 8UE&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td class="op-stagecoach"&gt;Stagecoach&lt;/td&gt;
+      &lt;td&gt;Walthamstow Ave Bus Garage (Nr A406)&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.app.goo.gl/1oFKtUUEXQHZgshJ7" target="_blank"&gt;Walthamstow Avenue, London&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td class="op-stagecoach"&gt;Stagecoach&lt;/td&gt;
+      &lt;td&gt;Leyton Bus Garage&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.app.goo.gl/TRJzk8kfRa8qDSNL9" target="_blank"&gt;Leyton, London&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td class="op-arriva"&gt;Arriva&lt;/td&gt;
+      &lt;td&gt;Hackney Central Bus Garage&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.app.goo.gl/oyXMxhiecj9GPx387" target="_blank"&gt;Hackney Central, London&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td class="op-arriva"&gt;Arriva&lt;/td&gt;
+      &lt;td&gt;Norwood Bus Garage&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.app.goo.gl/BFoTiHCoQAW6J1Bz6" target="_blank"&gt;Norwood, London&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td class="op-arriva"&gt;Arriva&lt;/td&gt;
+      &lt;td&gt;Tottenham Bus Garage&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.app.goo.gl/fNu1QowXvQdBwLRy8" target="_blank"&gt;Tottenham, London&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td class="op-goahead"&gt;Go-Ahead&lt;/td&gt;
+      &lt;td&gt;Barking River Road&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.app.goo.gl/RtEq8yB6PA71gTaw9" target="_blank"&gt;51 River Rd., London IG11 0DA&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td class="op-goahead"&gt;Go-Ahead&lt;/td&gt;
+      &lt;td&gt;Camberwell Bus Garage&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.app.goo.gl/cV8VbsjmmbAhy4WY8" target="_blank"&gt;20 Warner Rd, London SE5 9LU&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td class="op-stagecoach"&gt;Stagecoach&lt;/td&gt;
+      &lt;td&gt;Merton Bus Garage&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.app.goo.gl/h5r1CnMzsGjvfRYf9" target="_blank"&gt;21 Leyton Rd, London SW19 1DJ&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Battersea -->
-    <tr>
-      <td class="op-abellio">Transport UK London Bus</td>
-      <td>Battersea</td>
-      <td><a href="https://maps.google.com/?q=Silverthorne+Road,+Battersea,+London,+SW8+3HE" target="_blank">Silverthorne Road, SW8 3HE</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-abellio"&gt;Transport UK London Bus&lt;/td&gt;
+      &lt;td&gt;Battersea&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=Silverthorne+Road,+Battersea,+London,+SW8+3HE" target="_blank"&gt;Silverthorne Road, SW8 3HE&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Beddington -->
-    <tr>
-      <td class="op-abellio">Transport UK London Bus</td>
-      <td>Beddington</td>
-      <td><a href="https://maps.google.com/?q=Unit+10,+Beddington+Cross,+Beddington+Farm+Road,+Croydon,+CR0+4XH" target="_blank">Beddington Farm Road, CR0 4XH</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-abellio"&gt;Transport UK London Bus&lt;/td&gt;
+      &lt;td&gt;Beddington&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=Unit+10,+Beddington+Cross,+Beddington+Farm+Road,+Croydon,+CR0+4XH" target="_blank"&gt;Beddington Farm Road, CR0 4XH&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Walworth -->
-    <tr>
-      <td class="op-abellio">Transport UK London Bus</td>
-      <td>Walworth</td>
-      <td><a href="https://maps.google.com/?q=301+Camberwell+New+Road,+London,+SE5+0TF" target="_blank">301 Camberwell New Road, SE5 0TF</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-abellio"&gt;Transport UK London Bus&lt;/td&gt;
+      &lt;td&gt;Walworth&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=301+Camberwell+New+Road,+London,+SE5+0TF" target="_blank"&gt;301 Camberwell New Road, SE5 0TF&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Battersea -->
-    <tr>
-      <td class="op-abellio">Transport UK London Bus</td>
-      <td>Battersea</td>
-      <td><a href="https://maps.google.com/?q=Silverthorne+Road,+Battersea,+London,+SW8+3HE" target="_blank">Silverthorne Road, SW8 3HE</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-abellio"&gt;Transport UK London Bus&lt;/td&gt;
+      &lt;td&gt;Battersea&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=Silverthorne+Road,+Battersea,+London,+SW8+3HE" target="_blank"&gt;Silverthorne Road, SW8 3HE&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Beddington -->
-    <tr>
-      <td class="op-abellio">Transport UK London Bus</td>
-      <td>Beddington</td>
-      <td><a href="https://maps.google.com/?q=Unit+10,+Beddington+Cross,+Beddington+Farm+Road,+Croydon,+CR0+4XH" target="_blank">Beddington Farm Road, CR0 4XH</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-abellio"&gt;Transport UK London Bus&lt;/td&gt;
+      &lt;td&gt;Beddington&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=Unit+10,+Beddington+Cross,+Beddington+Farm+Road,+Croydon,+CR0+4XH" target="_blank"&gt;Beddington Farm Road, CR0 4XH&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Walworth -->
-    <tr>
-      <td class="op-abellio">Transport UK London Bus</td>
-      <td>Walworth</td>
-      <td><a href="https://maps.google.com/?q=301+Camberwell+New+Road,+London,+SE5+0TF" target="_blank">301 Camberwell New Road, SE5 0TF</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-abellio"&gt;Transport UK London Bus&lt;/td&gt;
+      &lt;td&gt;Walworth&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=301+Camberwell+New+Road,+London,+SE5+0TF" target="_blank"&gt;301 Camberwell New Road, SE5 0TF&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Twickenham -->
-    <tr>
-      <td class="op-abellio">Transport UK London Bus</td>
-      <td>Fulwell (Twickenham)</td>
-      <td><a href="https://maps.google.com/?q=The+Old+Tram+Depot,+Stanley+Road,+Twickenham,+TW2+5NP" target="_blank">Stanley Road, TW2 5NP</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-abellio"&gt;Transport UK London Bus&lt;/td&gt;
+      &lt;td&gt;Fulwell (Twickenham)&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=The+Old+Tram+Depot,+Stanley+Road,+Twickenham,+TW2+5NP" target="_blank"&gt;Stanley Road, TW2 5NP&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Southall -->
-    <tr>
-      <td class="op-abellio">Transport UK London Bus</td>
-      <td>Southall (Armstrong Way)</td>
-      <td><a href="https://maps.google.com/?q=Armstrong+Way,+Southall,+UB2+4SD" target="_blank">Armstrong Way, UB2 4SD</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-abellio"&gt;Transport UK London Bus&lt;/td&gt;
+      &lt;td&gt;Southall (Armstrong Way)&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=Armstrong+Way,+Southall,+UB2+4SD" target="_blank"&gt;Armstrong Way, UB2 4SD&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Hayes -->
-    <tr>
-      <td class="op-abellio">Transport UK London Bus</td>
-      <td>Hayes</td>
-      <td><a href="https://maps.google.com/?q=Dawley+Road,+Hayes,+UB3+1EF" target="_blank">Dawley Road, Hayes, UB3 1EF</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-abellio"&gt;Transport UK London Bus&lt;/td&gt;
+      &lt;td&gt;Hayes&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=Dawley+Road,+Hayes,+UB3+1EF" target="_blank"&gt;Dawley Road, Hayes, UB3 1EF&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Metroline garages -->
-    <tr>
-      <td class="op-metroline">Metroline</td>
-      <td>Athlon Road</td>
-      <td><a href="https://maps.google.com/?q=Capital+Business+Centre,+Athlon+Road,+Wembley,+HA0+1YU" target="_blank">Capital Business Centre, Athlon Road, HA0 1YU</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-metroline"&gt;Metroline&lt;/td&gt;
+      &lt;td&gt;Athlon Road&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=Capital+Business+Centre,+Athlon+Road,+Wembley,+HA0+1YU" target="_blank"&gt;Capital Business Centre, Athlon Road, HA0 1YU&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <tr>
-      <td class="op-metroline">Metroline</td>
-      <td>Brentford</td>
-      <td><a href="https://maps.google.com/?q=Commerce+Road,+Brentford,+TW8+8LZ" target="_blank">Commerce Road, TW8 8LZ</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    &lt;tr&gt;
+      &lt;td class="op-metroline"&gt;Metroline&lt;/td&gt;
+      &lt;td&gt;Brentford&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=Commerce+Road,+Brentford,+TW8+8LZ" target="_blank"&gt;Commerce Road, TW8 8LZ&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <tr>
-      <td class="op-metroline">Metroline</td>
-      <td>Cricklewood</td>
-      <td><a href="https://maps.google.com/?q=329+Edgware+Road,+Cricklewood,+NW2+6JP" target="_blank">329 Edgware Road, NW2 6JP</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    &lt;tr&gt;
+      &lt;td class="op-metroline"&gt;Metroline&lt;/td&gt;
+      &lt;td&gt;Cricklewood&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=329+Edgware+Road,+Cricklewood,+NW2+6JP" target="_blank"&gt;329 Edgware Road, NW2 6JP&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <tr>
-      <td class="op-metroline">Metroline</td>
-      <td>Edgware</td>
-      <td><a href="https://maps.google.com/?q=Approach+Road,+Edgware,+HA8+7AN" target="_blank">Approach Road, HA8 7AN</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    &lt;tr&gt;
+      &lt;td class="op-metroline"&gt;Metroline&lt;/td&gt;
+      &lt;td&gt;Edgware&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=Approach+Road,+Edgware,+HA8+7AN" target="_blank"&gt;Approach Road, HA8 7AN&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <tr>
-      <td class="op-metroline">Metroline</td>
-      <td>Harrow Weald</td>
-      <td><a href="https://maps.google.com/?q=467+High+Road,+Harrow+Weald,+HA3+6EJ" target="_blank">467 High Road, HA3 6EJ</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    &lt;tr&gt;
+      &lt;td class="op-metroline"&gt;Metroline&lt;/td&gt;
+      &lt;td&gt;Harrow Weald&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=467+High+Road,+Harrow+Weald,+HA3+6EJ" target="_blank"&gt;467 High Road, HA3 6EJ&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <tr>
-      <td class="op-metroline">Metroline</td>
-      <td>Holloway</td>
-      <td><a href="https://maps.google.com/?q=37A+Pemberton+Gardens,+London,+N19+5RR" target="_blank">37A Pemberton Gardens, N19 5RR</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    &lt;tr&gt;
+      &lt;td class="op-metroline"&gt;Metroline&lt;/td&gt;
+      &lt;td&gt;Holloway&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=37A+Pemberton+Gardens,+London,+N19+5RR" target="_blank"&gt;37A Pemberton Gardens, N19 5RR&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <tr>
-      <td class="op-metroline">Metroline</td>
-      <td>Perivale (East)</td>
-      <td><a href="https://maps.google.com/?q=Alperton+Lane,+Perivale,+UB6+8DW" target="_blank">Alperton Lane, UB6 8DW</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    &lt;tr&gt;
+      &lt;td class="op-metroline"&gt;Metroline&lt;/td&gt;
+      &lt;td&gt;Perivale (East)&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=Alperton+Lane,+Perivale,+UB6+8DW" target="_blank"&gt;Alperton Lane, UB6 8DW&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <tr>
-      <td class="op-metroline">Metroline</td>
-      <td>Potters Bar</td>
-      <td><a href="https://maps.google.com/?q=High+Street,+Potters+Bar,+EN6+5BE" target="_blank">High Street, EN6 5BE</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    &lt;tr&gt;
+      &lt;td class="op-metroline"&gt;Metroline&lt;/td&gt;
+      &lt;td&gt;Potters Bar&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=High+Street,+Potters+Bar,+EN6+5BE" target="_blank"&gt;High Street, EN6 5BE&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <tr>
-      <td class="op-metroline">Metroline</td>
-      <td>Willesden</td>
-      <td><a href="https://maps.google.com/?q=287+High+Road,+Willesden,+NW10+2JY" target="_blank">287 High Road, NW10 2JY</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    &lt;tr&gt;
+      &lt;td class="op-metroline"&gt;Metroline&lt;/td&gt;
+      &lt;td&gt;Willesden&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=287+High+Road,+Willesden,+NW10+2JY" target="_blank"&gt;287 High Road, NW10 2JY&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- First Bus London -->
-    <tr>
-      <td class="op-first">First Bus London</td>
-      <td>Tolworth</td>
-      <td><a href="https://maps.google.com/?q=180+Bromley+Road,+Catford,+SE6+2XA" target="_blank">180 Bromley Road, SE6 2XA</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-first"&gt;First Bus London&lt;/td&gt;
+      &lt;td&gt;Tolworth&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=180+Bromley+Road,+Catford,+SE6+2XA" target="_blank"&gt;180 Bromley Road, SE6 2XA&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Stagecoach London Plumstead -->
-    <tr>
-      <td class="op-stagecoach">Stagecoach</td>
-      <td>Plumstead</td>
-      <td><a href="https://maps.google.com/?q=Pettman+Crescent,+Plumstead,+SE28+0BJ" target="_blank">Pettman Crescent, SE28 0BJ</a></td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td class="op-stagecoach"&gt;Stagecoach&lt;/td&gt;
+      &lt;td&gt;Plumstead&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=Pettman+Crescent,+Plumstead,+SE28+0BJ" target="_blank"&gt;Pettman Crescent, SE28 0BJ&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Twickenham with Fleet Vehicles (scrollable after 3 lines) -->
-    <tr>
-      <td class="op-abellio">Transport UK London Bus</td>
-      <td>Fulwell (Twickenham)</td>
-      <td><a href="https://maps.google.com/?q=The+Old+Tram+Depot,+Stanley+Road,+Twickenham,+TW2+5NP" target="_blank">Stanley Road, TW2 5NP</a></td>
-      <td class="fleet-cell">
-        6767 EY61UKJ - Ford Fiesta<br>
-        6798 CA12MVC - Ford Fiesta<br>
-        6827 FG68WDF - Vauxhall Astra<br>
-        6831 HK67ERJ - Vauxhall Astra<br>
-        6836 MV17LVH - Vauxhall Astra<br>
-        6838 MT68FNA - Vauxhall Astra<br>
-        6841 YJ66FMY - Peugeot 308<br>
-        6842 AJ17MJK - Kia Ceed<br>
-        6843 RE67CUH - Kia Proceed<br>
-        6844 RJ66YXC - Kia Ceed<br>
-        6845 OU68WLA - Peugeot 308<br>
-        6851 BG18FFR - Seat Leon<br>
-        6852 MT17UOC - Mazda 3<br>
-        6856 OU17XZD - Volkswagen Golf<br>
-        6857 MT67GVE - Renault Captur<br>
-        6858 RA18XPX - SSANGYONG Tivoli<br>
-        6860 NA17UMS - DS DS4<br>
-        6865 YO17RUC - Seat Leon<br>
-        6866 LS69MMF - Alfa Romeo Giulietta<br>
-        6867 LR17EWY - Ford Focus<br>
-        6868 HT17UYV - Renault Captur<br>
-        6869 FP17ORK - Vauxhall Mokka<br>
-        6907 MC19XNE - Peugeot Expert (Van)<br>
+    
+    &lt;tr&gt;
+      &lt;td class="op-abellio"&gt;Transport UK London Bus&lt;/td&gt;
+      &lt;td&gt;Fulwell (Twickenham)&lt;/td&gt;
+      &lt;td&gt;&lt;a href="https://maps.google.com/?q=The+Old+Tram+Depot,+Stanley+Road,+Twickenham,+TW2+5NP" target="_blank"&gt;Stanley Road, TW2 5NP&lt;/a&gt;&lt;/td&gt;
+      &lt;td class="fleet-cell"&gt;
+        6767 EY61UKJ - Ford Fiesta&lt;br&gt;
+        6798 CA12MVC - Ford Fiesta&lt;br&gt;
+        6827 FG68WDF - Vauxhall Astra&lt;br&gt;
+        6831 HK67ERJ - Vauxhall Astra&lt;br&gt;
+        6836 MV17LVH - Vauxhall Astra&lt;br&gt;
+        6838 MT68FNA - Vauxhall Astra&lt;br&gt;
+        6841 YJ66FMY - Peugeot 308&lt;br&gt;
+        6842 AJ17MJK - Kia Ceed&lt;br&gt;
+        6843 RE67CUH - Kia Proceed&lt;br&gt;
+        6844 RJ66YXC - Kia Ceed&lt;br&gt;
+        6845 OU68WLA - Peugeot 308&lt;br&gt;
+        6851 BG18FFR - Seat Leon&lt;br&gt;
+        6852 MT17UOC - Mazda 3&lt;br&gt;
+        6856 OU17XZD - Volkswagen Golf&lt;br&gt;
+        6857 MT67GVE - Renault Captur&lt;br&gt;
+        6858 RA18XPX - SSANGYONG Tivoli&lt;br&gt;
+        6860 NA17UMS - DS DS4&lt;br&gt;
+        6865 YO17RUC - Seat Leon&lt;br&gt;
+        6866 LS69MMF - Alfa Romeo Giulietta&lt;br&gt;
+        6867 LR17EWY - Ford Focus&lt;br&gt;
+        6868 HT17UYV - Renault Captur&lt;br&gt;
+        6869 FP17ORK - Vauxhall Mokka&lt;br&gt;
+        6907 MC19XNE - Peugeot Expert (Van)&lt;br&gt;
         6911 DV69EOO - Vauxhall Vivaro (Van)
-      </td>
-    </tr>
+      &lt;/td&gt;
+    &lt;/tr&gt;
 
-    <!-- Unassigned (if any) -->
-    <tr>
-      <td colspan="3" class="none">Unassigned Fleet Vehicles</td>
-      <td class="fleet-cell none">No assigned fleet</td>
-    </tr>
+    
+    &lt;tr&gt;
+      &lt;td colspan="3" class="none"&gt;Unassigned Fleet Vehicles&lt;/td&gt;
+      &lt;td class="fleet-cell none"&gt;No assigned fleet&lt;/td&gt;
+    &lt;/tr&gt;
 
-  </tbody>
-</table>
+  &lt;/tbody&gt;
+&lt;/table&gt;
 
-<script>
+&lt;script&gt;
 function filterGarages(q) {
   q = q.toLowerCase();
-  document.querySelectorAll('#garageTable tbody tr').forEach(r => {
+  document.querySelectorAll(' tbody="" tr').foreach(r=""> {
     r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
   });
 }
-</script>'>
+'&gt;
     </iframe>
-
-  </div>
 </div>
+</div>
+
 <script>
 // === COPY BUTTON ===
 document.getElementById('copyBtn').addEventListener('click', async () => {
