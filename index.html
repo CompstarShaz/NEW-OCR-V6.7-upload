@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=0.7">
 <title>Asset Locator + OCR + TTS + Media Gallery</title>
-<script src="./assets/tesseract.min.js"></script>
-<script src="./assets/html2canvas.min.js"></script>
-
+<script src="assets/tesseract.min.js"></script>
+<script src="assets/html2canvas.min.js"></script>
+<script src="assets/jspdf.umd.min.js"></script>
 	<style>
-/html,
+html,
 body {
 	height: auto;
 	overflow-x: hidden;
@@ -56,7 +56,7 @@ canvas {
 	top: -10px;
 	color: #fff;
 	font-size: 1em;
-	z-index: 3;
+	z-index: 0;
 	pointer-events: none;
 	user-select: 0;
 	opacity: 0.8;
@@ -93,9 +93,9 @@ body {
 /* === Neon Glow Accent Card Theme === */
 body.dark .card {
   background: rgba(10, 20, 40, 0.4);
-  border: 1px solid rgba(0, 255, 213, 0.3);
-  box-shadow: 0 0 25px rgba(0, 255, 255, 0.35), inset 0 0 8px rgba(0, 255, 213, 0.15);
-  color: #ccfaff;
+  border: 2px solid rgba(0, 255, 213, 0.7);
+  box-shadow: 8px 12px 25px rgba(0, 255, 255, 0.55), inset 4px 12px 18px rgba(0, 255, 213, 0.35);
+  color: #FFD2FE;
   transition: all 0.4s ease;
 }
 body.light .card {
@@ -655,7 +655,7 @@ body.light .nav-btn {
   height: 90px;
   position: fixed
   top: 12px;
-  left: %;
+  left: 28%;
   z-index: 100;
   cursor: pointer;
   border-radius: 26px;
@@ -991,7 +991,7 @@ body.light .fixed-btn::after {
     position: fixed;
     top: 12px;
     left: 110px;
-    z-index: 100;
+    z-index: 102;
     cursor: pointer;
     border-radius: 26px;
     box-shadow: 4px 8px 20px #7A30CC;
@@ -1007,27 +1007,24 @@ body.light .fixed-btn::after {
   .fixed-btn::after { content: attr(data-title); position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 1.2em; color: #CAD8F1; text-shadow: 3px 3px 3px #212121; white-space: nowrap; font-weight: 600; }
   body.light .fixed-btn::after { color: #111; text-shadow: none; }
 
-  .btn-3d { background-image: url('assets/bgrem.gif'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: 10px; width: 90px; height: 90px; position: fixed; top: 130px; left: 10px; z-index: 101; cursor: pointer; border-radius: 26px; box-shadow: 4px 8px 20px #7A30CC; }
-  .btn-3d:active { transform: translateY(6px); box-shadow: 0 6px 0 #123a80, 0 6px 12px rgba(0,0,0,0.6); }
-
   /* Overlay */
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: center; justify-content: center; z-index: 1000; }
   .overlay.active { display: flex; }
   .iframe-container { position: relative; width: 90vw; height: 90vh; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
   .iframe-container iframe { width: 100%; height: 100%; border: none; }
   .close-btn { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; background: #ff4d4d; color: #fff; font-size: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.6); z-index: 2; }
-  </style></head>
+  </style>
+</head>
 <body class="dark">
 <div class="viz"></div>
 <div class="viz canvas">❄️❄️❄️</div>
-<body>
-<div class="btn-3d" id="openBtn">.......BG REMOVER</div>
-<div class="overlay" id="overlay">
-<div class="iframe-container">
-<div class="close-btn" id="closeBtn">×</div>
-<iframe src="assets/bgrem.html"></iframe>
-</div>
-</div>
+<div class="btn-3d" id="openBtn">BG</div>
+  <div class="overlay" id="overlay">
+    <div class="iframe-container">
+      <div class="close-btn" id="closeBtn">×</div>
+      <iframe src="assets/bgrem.html"></iframe>
+    </div>
+  </div>  
 <div class="parallax-layer parallax-top"></div>
 <div class="parallax-layer parallax-mid"></div>
 <div class="parallax-layer parallax-bottom"></div>
@@ -1191,7 +1188,7 @@ flex-wrap:wrap;
 </div>
 </div>
 <button class="" id=""></button>
-<button class="fixed-btn" data-title="Login" id="loginnRefBtn" style="background:none;border:none;padding:0;width:90px;height:90px;position:fixed;top:15px;right:28%;z-index:101;cursor:pointer;">
+<button class="fixed-btn" data-title="Login" id="loginnRefBtn" style="background:none;border:none;padding:0;width:90px;height:90px;position:fixed;top:15px;right:27%;z-index:101;cursor:pointer;">
 <img alt="Login Reference" src="assets/login.webp" style="width:100%;height:100%;border-radius:16px;box-shadow:0 4px 12px rgba(0,255,255,.3);"/>
 </button>
 <div class="ref-modal" id="loginnRefModal">
@@ -1609,68 +1606,76 @@ function filterGarages(q) {
 </div>
 
 <script>
-// === COPY BUTTON ===
-document.getElementById('copyBtn').addEventListener('click', async () => {
-  const text = (resultsBox && resultsBox.textContent.trim()) || '';
-  if (!text || text.startsWith('No')) return alert('No fleet numbers to copy!');
-  try {
-    await navigator.clipboard.writeText(text);
-    copyBtn.textContent = '✅ Copied!';
-    setTimeout(() => copyBtn.textContent = '📋 Copy Fleet Numbers', 1500);
-  } catch (err) {
-    console.error('Clipboard copy failed:', err);
-    alert('Clipboard not supported in this browser.');
-  }
-});
-
-// === EXPORT FLEET NUMBERS ONLY ===
 document.getElementById('exportTxtBtn').onclick = () => {
-  const raw = resultsBox.textContent.trim();
-  if (!raw || raw.startsWith('No')) return alert('No fleet numbers to export!');
-  let list = raw.split(/[\s,]+/).map(x=>x.trim().toUpperCase()).filter(x=>x);
-  list = [...new Set(list)].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+  const rawText = resultsBox.textContent.trim();
+  if (!rawText || rawText.startsWith('No')) {
+    alert('No fleet numbers to export!');
+    return;
+  }
 
-  const g={}; list.forEach(n=>{const p=/^[A-Z]+/.exec(n)?.[0]||'NUM';(g[p]??=[]).push(n);});
-  let txt=`- Asset Locator App -\n(Clockwork Schedule Fleet Numbers)\n\nFleet.\n`;
-  Object.keys(g).sort().forEach(p=>{txt+=g[p].map(x=>x+',').join('\n')+'\n\n';});
+  // Split, clean, remove duplicates, and sort
+  let fleetList = rawText
+    .split(/[\s,]+/)
+    .map(x => x.trim())
+    .filter(x => x.length > 0);
 
-  const d=new Date(),date=`${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
-  const blob=new Blob([txt],{type:'text/plain'});
-  const a=document.createElement('a');a.download=`Clockwork_${date}.txt`;a.href=URL.createObjectURL(blob);a.click();
+  fleetList = [...new Set(fleetList)].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+  // Format vertically, one per line, each ending with a comma
+  const formattedText = fleetList.map(n => n + ',').join('\n');
+
+  // Format filename as Clockwork_(DD-MM-YYYY).txt
+  const today = new Date();
+  const dateStr = `${String(today.getDate()).padStart(2,'0')}-${String(today.getMonth()+1).padStart(2,'0')}-${today.getFullYear()}`;
+  const fileName = `Clockwork_${dateStr}.txt`;
+
+  // Create and trigger download
+  const blob = new Blob([formattedText], { type: 'text/plain' });
+  const link = document.createElement('a');
+  link.download = fileName;
+  link.href = URL.createObjectURL(blob);
+  link.click();
 };
+</script>
+<script>
+document.getElementById('exportTxtBtn').onclick = () => {
+  const rawText = resultsBox.textContent.trim();
+  if (!rawText || rawText.startsWith('No')) {
+    alert('No fleet numbers to export!');
+    return;
+  }
 
-// === EXPORT FLEET NUMBERS + OCR DETAILS ===
-document.getElementById('exportTxtOCRBtn').onclick = () => {
-  const raw = resultsBox.textContent.trim();
-  if (!raw || raw.startsWith('No')) return alert('No fleet numbers to export!');
-  let list = raw.split(/[\s,]+/).map(x=>x.trim().toUpperCase()).filter(x=>x);
-  list = [...new Set(list)].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+  let fleetList = rawText
+    .split(/[\s,]+/)
+    .map(x => x.trim().toUpperCase())
+    .filter(x => x.length > 0);
 
-  const g={}; list.forEach(n=>{const p=/^[A-Z]+/.exec(n)?.[0]||'NUM';(g[p]??=[]).push(n);});
-  let txt=`- Asset Locator App -\n(Clockwork Schedule Fleet Numbers + OCR Details)\n\nFleet.\n`;
-  Object.keys(g).sort().forEach(p=>{txt+=g[p].map(x=>x+',').join('\n')+'\n\n';});
-  txt+=`------------------------------------------\nOCR Extracted Details:\n\n`;
-  txt+=(lastOCRText && lastOCRText.trim().length?lastOCRText.trim():'(No OCR results found)')+'\n';
+  fleetList = [...new Set(fleetList)].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
-  const d=new Date(),date=`${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
-  const blob=new Blob([txt],{type:'text/plain'});
-  const a=document.createElement('a');a.download=`Clockwork_${date}.txt`;a.href=URL.createObjectURL(blob);a.click();
+  const groups = {};
+  fleetList.forEach(item => {
+    const prefix = /^[A-Z]+/.exec(item)?.[0] || 'NUM';
+    if (!groups[prefix]) groups[prefix] = [];
+    groups[prefix].push(item);
+  });
+
+  let formattedText = `- Asset Locator App -\n(Clockwork Schedule Fleet Numbers)\n\nFleet.\n`;
+
+  Object.keys(groups).sort().forEach(prefix => {
+    formattedText += groups[prefix].map(n => n + ',').join('\n');
+    formattedText += '\n\n';
+  });
+
+  const today = new Date();
+  const dateStr = `${String(today.getDate()).padStart(2,'0')}-${String(today.getMonth()+1).padStart(2,'0')}-${today.getFullYear()}`;
+  const fileName = `Clockwork_${dateStr}.txt`;
+
+  const blob = new Blob([formattedText], { type: 'text/plain' });
+  const link = document.createElement('a');
+  link.download = fileName;
+  link.href = URL.createObjectURL(blob);
+  link.click();
 };
-
-// === EXPORT BUTTONS AS JPG ===
-document.getElementById('exportBtnsImg').addEventListener('click', () => {
-  const c=document.getElementById('buttonsContainer');
-  if(!c||c.children.length===0)return alert('No buttons to export!');
-  html2canvas(c,{backgroundColor:'#000',useCORS:true,scale:2})
-  .then(cv=>{
-    const d=new Date(),name=`FleetButtons-${d.toISOString().slice(0,19).replace(/[:T]/g,'_')}.jpg`;
-    cv.toBlob(b=>{
-      if(!b)return alert('Failed to generate image.');
-      const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);
-    },'image/jpeg',0.95);
-  })
-  .catch(e=>{console.error('Export failed:',e);alert('Unable to export button image.');});
-});
 </script>
 <script>
   const snowCount = 180;
@@ -2151,7 +2156,7 @@ themeBtn.onclick = () => {
 // Initialize snow on load
 updateSnow();
 </script>
-<script type="x-shader/x-fragment" id="fragmentShader">
+<script id="fragmentShader" type="x-shader/x-fragment">
   varying vec2 vUv;
   uniform float u_ratio;
   uniform float u_time;
@@ -2240,8 +2245,7 @@ updateSnow();
     gl_FragColor = vec4(color, 1.);
   }
 </script>
-
-<script type="x-shader/x-vertex" id="vertexShader">
+<script id="vertexShader" type="x-shader/x-vertex">
   varying vec2 vUv;
   void main() {
     vUv = uv;
@@ -2249,7 +2253,7 @@ updateSnow();
   }
 </script>
 <script type="module">
-import * as THREE from 'assets/three.module.min.js';
+import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js';
 
 let config = {
     dotsNumber: 11,
@@ -2420,17 +2424,6 @@ window.addEventListener('resize', () => viz.updateSize());
 viz.loop();
 </script>
 <script>
-(() => {
-  const btn = document.getElementById('garageRefBtn');
-  const modal = document.getElementById('garageRefModal');
-  const close = document.getElementById('garageRefClose');
-
-  btn.onclick = () => modal.style.display = 'block';
-  close.onclick = () => modal.style.display = 'none';
-  modal.onclick = e => { if(e.target === modal) modal.style.display = 'none'; };
-})();
-</script>
-<script>
 /* ===== GARAGE REFERENCE – LOGIC ===== */
 const garageRefBtn   = document.getElementById('garageRefBtn');
 const garageRefModal = document.getElementById('garageRefModal');
@@ -2452,7 +2445,6 @@ garageRefModal.onclick = (e) => {
 </script>
 <script src="assets/html2canvas.min.js"></script>
 <script src="assets/jspdf.umd.min.js"></script>
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const notebook = document.getElementById("notebook");
@@ -2467,7 +2459,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const undoBtn = document.getElementById("undoBtn");
   const redoBtn = document.getElementById("redoBtn");
   const exportBtn = document.getElementById("exportBtn");
-  const accessPassword = "21";
+  const accessPassword = "212121";
 
   let historyStack=[], redoStack=[], lastClickX=0, lastClickY=0;
 
@@ -2669,6 +2661,9 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
   </script>
+</body>
+</html>
+
 
 </body>
 </html>
