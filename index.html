@@ -1016,7 +1016,36 @@ body.light .fixed-btn::after {
   .iframe-container { position: relative; width: 90vw; height: 90vh; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
   .iframe-container iframe { width: 100%; height: 100%; border: none; }
   .close-btn { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; background: #ff4d4d; color: #fff; font-size: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.6); z-index: 2; }
-  </style></head>
+  </style>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Sanchez&display=swap");
+
+svg {
+	font-family: "Sanchez", sans-serif;
+	width: 100%; height: 100%;
+}
+svg text {
+	animation: stroke 4s infinite alternate;
+	stroke-width: 2;
+	stroke: #365FA0;
+	font-size: 50px;
+}
+@keyframes stroke {
+	0%   {
+		fill: rgba(72,138,204,0); stroke: rgba(54,95,160,1);
+		stroke-dashoffset: 25%; stroke-dasharray: 0 50%; stroke-width: 2;
+	}
+	70%  {fill: rgba(72,138,204,0); stroke: rgba(54,95,160,1); }
+	80%  {fill: rgba(72,138,204,0); stroke: rgba(54,95,160,1); stroke-width: 3; }
+	100% {
+		fill: rgba(72,138,204,1); stroke: rgba(54,95,160,0);
+		stroke-dashoffset: -25%; stroke-dasharray: 50% 0; stroke-width: 0;
+	}
+}
+
+.wrapper {background-color: #382B6660};
+</style>
+</head>
 <body class="dark">
 <div class="viz"></div>
 <div class="viz canvas">❄️❄️❄️</div>
@@ -1042,7 +1071,13 @@ body.light .fixed-btn::after {
 </dl>
 <dl>
 </dl>
-<h3><p>C.W Companion</h3></p><p><h1><span style="color: #FEFEFE"></p>Asset Locator OCR</h1></span>
+<div class="wrapper">
+	<svg>
+		<text x="50%" y="50%" dy=".25em" text-anchor="middle">
+LVF OCR
+		</text>
+	</svg>
+</div>
 <img id="topLogo" src="assets/asset.png"/>
 <div class="card flex-row" style="justify-content:center;">
 <label class="tiny-btn" for="fileInput" style="
